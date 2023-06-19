@@ -1,6 +1,31 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import * as fcl from "@onflow/fcl";
+import { useUserStore } from "@/utils/store";
+import { useEffect } from "react";
+
+fcl
+  .config()
+  .put("accessNode.api", `https://rest-${process.env.NEXT_PUBLIC_FLOW_NETWORK}.onflow.org`)
+  .put("discovery.wallet", `https://fcl-discovery.onflow.org/${process.env.NEXT_PUBLIC_FLOW_NETWORK}/authn`)
+  .put("app.detail.icon", `https://i.ibb.co/TbcVHNh/logopp.png`)
+  .put("app.detail.title", `PeerPost`);
 
 export default function Home() {
+  const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  useEffect(() => fcl.currentUser.subscribe(setUser), [setUser]);
+
+  useEffect(() => {
+    if (user?.loggedIn) {
+      router.push('/dashboard');
+    }
+  }, [router, user]);
+
   return (
     <>
       <section className="bg-primary-800">
@@ -15,14 +40,15 @@ export default function Home() {
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <a
-                href="/register"
-                className="font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125"
+              <buttob
+                onClick={() => fcl.authenticate()}
+                className="font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
               >
                 Connect Wallet
-              </a>
+              </buttob>
             </div>
           </div>
+          å
         </nav>
 
         <div className="container px-4 lg:px-6">
@@ -42,8 +68,8 @@ export default function Home() {
                 content. Harness the power of blockchain and AI for an innovative blogging experience.
               </p>
               <div className="flex items-center gap-6">
-                <a
-                  href="/register"
+                <button
+                  onClick={() => fcl.authenticate()}
                   className="inline-flex items-center gap-2 group font-bold text-sm bg-lime text-primary-800 px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 256 256">
@@ -53,7 +79,7 @@ export default function Home() {
                     />
                   </svg>
                   <span>Start Writing</span>
-                </a>
+                </button>
                 {/* <p className="text-white/60">Explore Content</p> */}
               </div>
             </div>

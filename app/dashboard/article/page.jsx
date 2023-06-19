@@ -1,7 +1,14 @@
+"use client";
+
+import { useUserStore } from "@/utils/store";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
-    return (
-        <div>
-            List Articles
-        </div>
-    );
+	const router = useRouter();
+  const user = useUserStore((state) => state.user);
+  if (!user?.loggedIn) {
+    return router.push("/");
+  }
+
+  return <div>List Articles</div>;
 }

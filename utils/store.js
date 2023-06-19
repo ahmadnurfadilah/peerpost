@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export const useWriteStore = create((set) => ({
   title: "",
@@ -8,3 +9,16 @@ export const useWriteStore = create((set) => ({
   setDescription: (description) => set({ description: description }),
   setShowModalTitle: (status) => set({ showModalTitle: status }),
 }));
+
+export const useUserStore = create(
+  persist(
+    (set, get) => ({
+      user: null,
+      setUser: (user) => set({ user: user }),
+    }),
+    {
+      name: 'user-storage',
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+)

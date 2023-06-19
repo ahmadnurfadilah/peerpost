@@ -3,25 +3,33 @@ import { Tooltip } from "react-tooltip";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useRef, useState } from "react";
 import GetTitle from "@/components/ai/GetTitle";
-import { useWriteStore } from "@/utils/store";
+import { useUserStore, useWriteStore } from "@/utils/store";
 import Tiptap from "@/components/tiptap/Tiptap";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 registerPlugin(FilePondPluginImagePreview);
 
 export default function Page() {
+  const router = useRouter();
+  const user = useUserStore((state) => state.user);
   const pondRef = useRef();
   const priceRef = useRef();
   const title = useWriteStore((state) => state.title);
   const description = useWriteStore((state) => state.description);
   const setTitle = useWriteStore((state) => state.setTitle);
+  const setDescription = useWriteStore((state) => state.setDescription);
   const showModalTitle = useWriteStore((state) => state.showModalTitle);
   const setShowModalTitle = useWriteStore((state) => state.setShowModalTitle);
   const [thumbnail, setThumbnail] = useState();
+
+  if (!user?.loggedIn) {
+    return router.push("/");
+  }
 
   const handlePublish = () => {
     toast.dismiss();
@@ -37,7 +45,9 @@ export default function Page() {
     if (!pondRef.current?.getFile()?.file) {
       return toast.error('Thumbnail is required');
     }
-    
+
+    setTitle('');
+    setDescription('');
     toast.success('Published!');
   }
 
