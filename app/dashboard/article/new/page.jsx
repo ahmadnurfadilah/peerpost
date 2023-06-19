@@ -48,7 +48,15 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <div className="bg-white rounded-md shadow border p-4 mb-4">sdf</div>
+          <div className="bg-white rounded-md shadow border p-4 mb-4">
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label htmlFor="price" className="text-sm font-medium">Price</label>
+                <span className="text-xs font-semibold px-2 py-1 bg-lime rounded">in FLOW</span>
+              </div>
+              <input type="number" name="price" id="price" className="w-full border-gray-300 rounded" placeholder="0" />
+            </div>
+          </div>
           <button className="w-full flex items-center justify-center gap-2 font-bold text-sm text-lime bg-primary-800 px-4 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 256 256">
               <path
