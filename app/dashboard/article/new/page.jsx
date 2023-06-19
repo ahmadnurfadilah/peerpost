@@ -17,10 +17,29 @@ export default function Page() {
   const pondRef = useRef();
   const priceRef = useRef();
   const title = useWriteStore((state) => state.title);
+  const description = useWriteStore((state) => state.description);
   const setTitle = useWriteStore((state) => state.setTitle);
   const showModalTitle = useWriteStore((state) => state.showModalTitle);
   const setShowModalTitle = useWriteStore((state) => state.setShowModalTitle);
   const [thumbnail, setThumbnail] = useState();
+
+  const handlePublish = () => {
+    toast.dismiss();
+    if (title == '') {
+      return toast.error('Title is required');
+    }
+    if (description == '') {
+      return toast.error('Description is required');
+    }
+    if (priceRef?.current?.value < 0) {
+      return toast.error('Min. price is 0');
+    }
+    if (!pondRef.current?.getFile()?.file) {
+      return toast.error('Thumbnail is required');
+    }
+    
+    toast.success('Published!');
+  }
 
   return (
     <>
@@ -30,7 +49,7 @@ export default function Page() {
           <div className="bg-white rounded-md shadow border p-4">
             <div className="space-y-2">
               <label htmlFor="title" className="text-sm font-medium">
-                Title
+                Title <span className="text-danger-500">*</span>
               </label>
               <div className="flex items-center gap-2">
                 <input type="text" name="title" value={title} id="title" onChange={(e) => setTitle(e.target.value)} className="flex-1 w-full border-gray-300 rounded" placeholder="Title" />
@@ -52,7 +71,7 @@ export default function Page() {
 
             <div className="space-y-2 mt-4">
               <label htmlFor="description" className="text-sm font-medium">
-                Description
+                Description <span className="text-danger-500">*</span>
               </label>
               <Tiptap />
             </div>
@@ -63,7 +82,7 @@ export default function Page() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label htmlFor="price" className="text-sm font-medium">
-                  Price
+                  Price <span className="text-danger-500">*</span>
                 </label>
                 <span className="text-xs font-semibold px-2 py-1 bg-lime rounded">in FLOW</span>
               </div>
@@ -71,7 +90,7 @@ export default function Page() {
             </div>
             <div className="space-y-2">
               <label htmlFor="thumbnail" className="text-sm font-medium">
-                Thumbnail
+                Thumbnail <span className="text-danger-500">*</span>
               </label>
               <FilePond
                 ref={pondRef}

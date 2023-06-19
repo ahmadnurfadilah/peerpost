@@ -4,7 +4,7 @@ import { useWriteStore } from "@/utils/store";
 import { Icon } from "@iconify/react";
 import { Configuration, OpenAIApi } from 'openai'
 import { useState } from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 export default function GetTitle() {
   const config = new Configuration({
@@ -86,8 +86,6 @@ export default function GetTitle() {
           ))}
         </div>
       )}
-
-      <Toaster />
     </>
   );
 }

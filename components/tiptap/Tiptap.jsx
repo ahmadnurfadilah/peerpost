@@ -5,8 +5,11 @@ import { useCompletion } from "ai/react";
 import { TiptapExtensions } from "./TiptapExtension";
 import { TiptapProps } from "./TiptapProps";
 import { useEffect, useRef } from "react";
+import { useWriteStore } from "@/utils/store";
 
 const Tiptap = () => {
+  const setDescription = useWriteStore((state) => state.setDescription);
+
   const { completion, isLoading } = useCompletion({
     id: "novel",
     api: "/api/generate",
@@ -25,6 +28,9 @@ const Tiptap = () => {
     extensions: TiptapExtensions,
     editorProps: TiptapProps,
     autofocus: "end",
+    onUpdate: (e) => {
+      setDescription(e.editor.getHTML());
+    },
   });
 
   const prev = useRef("");
