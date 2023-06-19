@@ -5,11 +5,22 @@ import { Fragment, useCallback, useRef, useState } from "react";
 import GetTitle from "@/components/ai/GetTitle";
 import { useWriteStore } from "@/utils/store";
 import Tiptap from "@/components/tiptap/Tiptap";
+import { FilePond, registerPlugin } from "react-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css";
+import { toast } from "react-hot-toast";
+
+registerPlugin(FilePondPluginImagePreview);
 
 export default function Page() {
+  const pondRef = useRef();
+  const priceRef = useRef();
   const title = useWriteStore((state) => state.title);
+  const setTitle = useWriteStore((state) => state.setTitle);
   const showModalTitle = useWriteStore((state) => state.showModalTitle);
   const setShowModalTitle = useWriteStore((state) => state.setShowModalTitle);
+  const [thumbnail, setThumbnail] = useState();
 
   return (
     <>
@@ -22,7 +33,7 @@ export default function Page() {
                 Title
               </label>
               <div className="flex items-center gap-2">
-                <input type="text" name="title" value={title} id="title" className="flex-1 w-full border-gray-300 rounded" placeholder="Title" />
+                <input type="text" name="title" value={title} id="title" onChange={(e) => setTitle(e.target.value)} className="flex-1 w-full border-gray-300 rounded" placeholder="Title" />
                 <button
                   onClick={() => setShowModalTitle(true)}
                   data-tooltip-id="my-tooltip"
@@ -48,16 +59,33 @@ export default function Page() {
           </div>
         </div>
         <div>
-          <div className="bg-white rounded-md shadow border p-4 mb-4">
+          <div className="bg-white rounded-md shadow border p-4 mb-4 space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label htmlFor="price" className="text-sm font-medium">Price</label>
+                <label htmlFor="price" className="text-sm font-medium">
+                  Price
+                </label>
                 <span className="text-xs font-semibold px-2 py-1 bg-lime rounded">in FLOW</span>
               </div>
-              <input type="number" name="price" id="price" className="w-full border-gray-300 rounded" placeholder="0" />
+              <input ref={priceRef} type="number" name="price" id="price" className="w-full border-gray-300 rounded" placeholder="0" />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="thumbnail" className="text-sm font-medium">
+                Thumbnail
+              </label>
+              <FilePond
+                ref={pondRef}
+                dropOnPage
+                storeAsFile
+                name="thumbnail"
+                files={thumbnail}
+                allowMultiple={false}
+                onupdatefiles={setThumbnail}
+                acceptedFileTypes="image/*"
+              />
             </div>
           </div>
-          <button className="w-full flex items-center justify-center gap-2 font-bold text-sm text-lime bg-primary-800 px-4 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125">
+          <button onClick={() => handlePublish()} className="w-full flex items-center justify-center gap-2 font-bold text-sm text-lime bg-primary-800 px-4 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 256 256">
               <path
                 fill="currentColor"

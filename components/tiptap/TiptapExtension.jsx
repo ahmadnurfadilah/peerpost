@@ -49,7 +49,6 @@ export const TiptapExtensions = [
   }),
   Placeholder.configure({
     placeholder: ({ node }) => {
-      console.log(node);
       if (node.type.name === "heading") {
         return `Heading ${node.attrs.level}`;
       }

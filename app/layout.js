@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 
@@ -11,7 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`antialiased bg-slate-50 text-dark ${pjs.className}`}>{children}</body>
+      <body className={`antialiased bg-slate-50 text-dark ${pjs.className}`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }
