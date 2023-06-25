@@ -1,17 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import * as fcl from "@onflow/fcl";
 import { useUserStore } from "@/utils/store";
 import { useEffect } from "react";
-
-fcl
-  .config()
-  .put("accessNode.api", `https://rest-${process.env.NEXT_PUBLIC_FLOW_NETWORK}.onflow.org`)
-  .put("discovery.wallet", `https://fcl-discovery.onflow.org/${process.env.NEXT_PUBLIC_FLOW_NETWORK}/authn`)
-  .put("app.detail.icon", `https://i.ibb.co/TbcVHNh/logopp.png`)
-  .put("app.detail.title", `PeerPost`);
+import Logo from "@/components/logo";
+import "../flow/config";
 
 export default function Home() {
   const router = useRouter();
@@ -33,10 +27,7 @@ export default function Home() {
           <div className="container px-4 lg:px-6 flex items-center justify-between">
             <div className="flex items-center gap-6">
               <a href="/" className="flex items-center gap-2">
-                <div className="h-8 aspect-square relative">
-                  <Image src="/img/logo.svg" alt="Logo" fill />
-                </div>
-                <h6 className="font-extrabold text-lg text-lime">PeerPost</h6>
+                <Logo className="h-6 text-lime hover:text-white" />
               </a>
             </div>
             <div className="flex items-center gap-2">

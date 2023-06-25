@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useUserStore } from "@/utils/store";
+import Logo from "@/components/Logo";
 
 export default function Layout({ children }) {
   const router = useRouter();
@@ -41,12 +42,9 @@ export default function Layout({ children }) {
               open ? "-translate-x-0" : "-translate-x-64"
             }`}
           >
-            <div className="shrink-0 h-16 border-b border-lime/10 flex items-center px-4">
+            <div className="shrink-0 h-16 border-b border-lime/10 flex items-center px-4 justify-center">
               <a href="/" className="flex items-center gap-3">
-                <div className="relative h-8 aspect-square">
-                  <Image src="/img/logo.svg" alt="Logo" fill />
-                </div>
-                <h6 className="font-extrabold text-lg text-lime">PeerPost</h6>
+                <Logo className="h-6 text-lime hover:text-white" />
               </a>
             </div>
             <div className="h-full flex flex-col justify-between">
