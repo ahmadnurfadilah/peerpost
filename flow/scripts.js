@@ -127,3 +127,25 @@ export async function getPaidPostById(author, reader, postID) {
     args: (arg, t) => [arg(author, t.Address), arg(reader, t.Address), arg(postID, t.UInt64)],
   });
 }
+
+const PURCHASEDCOUNT = `
+import PeerPost from 0xPeerPost
+pub fun main(author: Address): UInt64 {
+	let acct = getAccount(author)
+    let capability = acct.getCapability<&{PeerPost.PostCollectionPublic}>(PeerPost.PostCollectionPublicPath)
+    let publicRef = capability.borrow()
+
+	var counters: UInt64 = 0
+	for postID in publicRef!.getAllPostIDs() {
+		let count = publicRef!.purchasedCount(postID: postID)
+		counters = (counters + count!)
+	}
+	return counters
+}`;
+
+export async function getPurchasedCount(author) {
+  return fcl.query({
+    cadence: PURCHASEDCOUNT,
+    args: (arg, t) => [arg(author, t.Address)],
+  });
+}

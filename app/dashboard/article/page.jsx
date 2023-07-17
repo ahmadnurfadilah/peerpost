@@ -58,7 +58,7 @@ export default function Page() {
     <>
       {loading && <Loader />}
 
-      <h2 className="font-bold text-xl mb-6">My Articles</h2>
+      <h1 className="font-bold text-xl mb-6">My Articles</h1>
       <table className="w-full bg-white border rounded-md shadow-sm">
         <thead className="bg-slate-100">
           <tr>
