@@ -6,6 +6,7 @@ import { useUserStore } from "@/utils/store";
 import { useEffect } from "react";
 import Logo from "@/components/logo";
 import "../flow/config";
+import { Wallet } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user?.loggedIn) {
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   }, [router, user]);
 
@@ -31,12 +32,13 @@ export default function Home() {
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <buttob
+              <button
                 onClick={() => fcl.authenticate()}
-                className="font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
+                className="flex items-center gap-2 font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
               >
-                Connect Wallet
-              </buttob>
+                <Wallet className="w-5 h-5" />
+                <span>Connect Wallet</span>
+              </button>
             </div>
           </div>
           å

@@ -1,7 +1,9 @@
 "use client";
+import "../../../../flow/config";
+import * as fcl from "@onflow/fcl";
 import { Tooltip } from "react-tooltip";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import GetTitle from "@/components/ai/GetTitle";
 import { useUserStore, useWriteStore } from "@/utils/store";
 import Tiptap from "@/components/tiptap/Tiptap";
@@ -11,6 +13,9 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
+import { handleFileToIpfs, handleJsonToIpfs } from "@/utils/ipfs";
+import { createPost } from "@/flow/transactions";
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -26,33 +31,90 @@ export default function Page() {
   const showModalTitle = useWriteStore((state) => state.showModalTitle);
   const setShowModalTitle = useWriteStore((state) => state.setShowModalTitle);
   const [thumbnail, setThumbnail] = useState();
+  const [loading, setLoading] = useState(false);
+  const [readingTime, setReadingTime] = useState(0);
+
+  useEffect(() => {
+    const wordsPerMinute = 200;
+    let textLength = description.split(" ").length;
+    if(description.length > 10){
+      let value = Math.ceil(textLength / wordsPerMinute);
+      setReadingTime(value);
+    }
+  }, [description]);
 
   if (!user?.loggedIn) {
     return router.push("/");
   }
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     toast.dismiss();
-    if (title == '') {
-      return toast.error('Title is required');
+    if (title == "") {
+      return toast.error("Title is required");
     }
-    if (description == '') {
-      return toast.error('Description is required');
+    if (description == "") {
+      return toast.error("Description is required");
     }
     if (priceRef?.current?.value < 0) {
-      return toast.error('Min. price is 0');
+      return toast.error("Min. price is 0");
     }
     if (!pondRef.current?.getFile()?.file) {
-      return toast.error('Thumbnail is required');
+      return toast.error("Thumbnail is required");
     }
 
-    setTitle('');
-    setDescription('');
-    toast.success('Published!');
-  }
+    setLoading(true);
+    let ipfsContentHash = "";
+    let ipfsThumbnailHash = "";
+
+    try {
+      const tThumb = toast.loading("Uploading thumbnail to IPFS...");
+      ipfsThumbnailHash = await handleFileToIpfs(pondRef.current?.getFile()?.file, new Date().toTimeString());
+      toast.dismiss(tThumb);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      return toast.error("Error occured!");
+    }
+
+    try {
+      const tContent = toast.loading("Uploading article to IPFS...");
+      ipfsContentHash = await handleJsonToIpfs(description, new Date().toTimeString());
+      toast.dismiss(tContent);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      return toast.error("Error occured!");
+    }
+
+    try {
+      const txId = await createPost(title, `https://ipfs.io/ipfs/${ipfsContentHash}`, `https://ipfs.io/ipfs/${ipfsThumbnailHash}`, parseInt(priceRef?.current?.value || 0).toFixed(2), readingTime);
+      fcl.tx(txId).subscribe((e) => {
+        if (e?.statusString != "") {
+          toast.dismiss();
+          toast.loading(e?.statusString);
+        }
+      });
+      await fcl.tx(txId).onceSealed();
+      toast.dismiss();
+
+      setTitle("");
+      setDescription("");
+      toast.success("Published!");
+      setLoading(false);
+      setTimeout(() => {
+        return router.push("/dashboard/article");
+      }, 1000);
+    } catch (err) {
+      toast.dismiss();
+      setLoading(false);
+      console.log(err);
+      return toast.error("Error occured!");
+    }
+  };
 
   return (
     <>
+      {loading && <Loader />}
       <Tooltip id="my-tooltip" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-2">
@@ -62,7 +124,15 @@ export default function Page() {
                 Title <span className="text-danger-500">*</span>
               </label>
               <div className="flex items-center gap-2">
-                <input type="text" name="title" value={title} id="title" onChange={(e) => setTitle(e.target.value)} className="flex-1 w-full border-gray-300 rounded" placeholder="Title" />
+                <input
+                  type="text"
+                  name="title"
+                  value={title}
+                  id="title"
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="flex-1 w-full border-gray-300 rounded"
+                  placeholder="Title"
+                />
                 <button
                   onClick={() => setShowModalTitle(true)}
                   data-tooltip-id="my-tooltip"
@@ -80,9 +150,12 @@ export default function Page() {
             </div>
 
             <div className="space-y-2 mt-4">
-              <label htmlFor="description" className="text-sm font-medium">
-                Description <span className="text-danger-500">*</span>
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="description" className="text-sm font-medium">
+                  Description <span className="text-danger-500">*</span>
+                </label>
+                <span className="text-xs font-bold text-primary-800 bg-gray-100 px-1 py-1">~ {readingTime} min read</span>
+              </div>
               <Tiptap />
             </div>
           </div>
@@ -96,7 +169,7 @@ export default function Page() {
                 </label>
                 <span className="text-xs font-semibold px-2 py-1 bg-lime rounded">in FLOW</span>
               </div>
-              <input ref={priceRef} type="number" name="price" id="price" className="w-full border-gray-300 rounded" placeholder="0" />
+              <input ref={priceRef} type="number" required name="price" id="price" className="w-full border-gray-300 rounded" placeholder="0" />
             </div>
             <div className="space-y-2">
               <label htmlFor="thumbnail" className="text-sm font-medium">
@@ -114,7 +187,10 @@ export default function Page() {
               />
             </div>
           </div>
-          <button onClick={() => handlePublish()} className="w-full flex items-center justify-center gap-2 font-bold text-sm text-lime bg-primary-800 px-4 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125">
+          <button
+            onClick={() => handlePublish()}
+            className="w-full flex items-center justify-center gap-2 font-bold text-sm text-lime bg-primary-800 px-4 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 256 256">
               <path
                 fill="currentColor"

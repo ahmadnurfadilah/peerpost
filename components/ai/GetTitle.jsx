@@ -31,7 +31,6 @@ export default function GetTitle() {
       });
       const list = result.data.choices[0].text;
       setApiResponse(JSON.parse(list));
-      console.log(JSON.parse(list));
     } catch (e) {
       toast.error("Something is going wrong, Please try again.");
     }

@@ -123,7 +123,7 @@ export default function Layout({ children }) {
                       <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                   </button>
-                  <h1 className="font-extrabold text-base md:text-lg">Dashboard</h1>
+                  {/* <h1 className="font-extrabold text-base md:text-lg">Dashboard</h1> */}
                 </div>
                 <div className="flex items-center gap-3">
                   <Link

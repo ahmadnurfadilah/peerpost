@@ -2,7 +2,7 @@ import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { Plus_Jakarta_Sans } from 'next/font/google'
 
-const pjs = Plus_Jakarta_Sans({ subsets: ['latin'] })
+const pjs = Plus_Jakarta_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700'] })
 
 export const metadata = {
   title: 'PeerPost - Decentralized Blogging Platform Driven by AI',
