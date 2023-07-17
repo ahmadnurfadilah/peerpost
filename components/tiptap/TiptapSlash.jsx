@@ -16,6 +16,7 @@ import va from "@vercel/analytics";
 import Magic from "../icon/Magic";
 import LoadingCircle from "../icon/LoadingCircle";
 import { toast } from "react-hot-toast";
+import { useWriteStore } from "@/utils/store";
 
 const Command = Extension.create({
   name: "slash-command",
@@ -45,6 +46,11 @@ const Command = Extension.create({
 
 const getSuggestionItems = ({ query }) => {
   return [
+    {
+      title: "Create outline",
+      description: "Use AI to create outline from title.",
+      icon: <Magic className="w-7 text-black" />,
+    },
     {
       title: "Continue writing",
       description: "Use AI to expand your thoughts.",
@@ -123,6 +129,7 @@ const CommandList = ({
   range,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const postTitle = useWriteStore((state) => state.title);
 
   const { complete, isLoading } = useCompletion({
     id: "novel",
@@ -154,13 +161,15 @@ const CommandList = ({
       if (item) {
         if (item.title === "Continue writing") {
           const text = editor.getText();
-          complete(text);
+          complete("CONTINUE#!#" + postTitle + "\n" + text);
+        } else if (item.title === "Create outline") {
+          complete("OUTLINE#!#" + postTitle);
         } else {
           command(item);
         }
       }
     },
-    [complete, command, editor, items],
+    [complete, command, editor, items, postTitle],
   );
 
   useEffect(() => {
