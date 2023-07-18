@@ -2,13 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import * as fcl from "@onflow/fcl";
-import { useUserStore } from "@/utils/store";
+import { useUserStore } from "../utils/store";
 import { useEffect } from "react";
-import Logo from "@/components/logo";
 import "../flow/config";
-import LogoFLow from "@/components/LogoFlow";
 import Link from "next/link";
 import { LayoutGrid } from "lucide-react";
+import Logo from "../components/Logo";
+import LogoFLow from "../components/LogoFlow";
 
 export default function Home() {
   const router = useRouter();

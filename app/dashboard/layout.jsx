@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { useUserStore } from "@/utils/store";
-import Logo from "@/components/Logo";
+import { useUserStore } from "../../utils/store";
+import Logo from "../../components/Logo";
 
 export default function Layout({ children }) {
   const router = useRouter();

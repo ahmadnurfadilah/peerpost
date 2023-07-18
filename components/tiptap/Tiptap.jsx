@@ -5,7 +5,7 @@ import { useCompletion } from "ai/react";
 import { TiptapExtensions } from "./TiptapExtension";
 import { TiptapProps } from "./TiptapProps";
 import { useEffect, useRef } from "react";
-import { useWriteStore } from "@/utils/store";
+import { useWriteStore } from "../../utils/store";
 
 const Tiptap = () => {
   const setDescription = useWriteStore((state) => state.setDescription);

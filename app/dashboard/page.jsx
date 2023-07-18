@@ -1,7 +1,7 @@
 "use client";
 import "../../flow/config";
-import { getBuyers, getMyPosts, getPurchasedCount } from "@/flow/scripts";
-import { useUserStore } from "@/utils/store";
+import { getBuyers, getMyPosts, getPurchasedCount } from "../../flow/scripts";
+import { useUserStore } from "../../utils/store";
 import { Newspaper } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useRouter } from "next/navigation";

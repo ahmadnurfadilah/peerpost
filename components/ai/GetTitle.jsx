@@ -1,6 +1,6 @@
 "use client";
 
-import { useWriteStore } from "@/utils/store";
+import { useWriteStore } from "../../utils/store";
 import { Icon } from "@iconify/react";
 import { Configuration, OpenAIApi } from 'openai'
 import { useState } from "react";

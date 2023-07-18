@@ -1,7 +1,7 @@
 "use client";
 
-import { getMyPosts } from "@/flow/scripts";
-import { useUserStore } from "@/utils/store";
+import { getMyPosts } from "../../../flow/scripts";
+import { useUserStore } from "../../../utils/store";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { Source_Code_Pro } from "next/font/google";
 import { Dialog, Transition } from '@headlessui/react'
-import { deletePost } from "@/flow/transactions";
+import { deletePost } from "../../../flow/transactions";
 import { toast } from "react-hot-toast";
-import Loader from "@/components/Loader";
 import { orderBy, sortBy } from "lodash";
+import Loader from "../../../components/Loader";
 
 const mono = Source_Code_Pro({ subsets: ["latin"] });
 

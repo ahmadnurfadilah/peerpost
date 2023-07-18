@@ -4,7 +4,7 @@ import * as fcl from "@onflow/fcl";
 import { Wallet } from "lucide-react";
 import Link from "next/link";
 import Logo from "./Logo";
-import { useUserStore } from "@/utils/store";
+import { useUserStore } from "../utils/store";
 import { JetBrains_Mono } from "next/font/google";
 import { useEffect, useState } from "react";
 import LogoFLow from "./LogoFlow";

@@ -1,20 +1,14 @@
 "use client";
 import "../../flow/config";
-import * as fcl from "@onflow/fcl";
-import Logo from "@/components/Logo";
-import { CircleDollarSign, Dot, Lock, Wallet } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useParams } from "next/navigation";
-import { useUserStore } from "@/utils/store";
 import { useEffect, useState } from "react";
 import moment from "moment";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import Link from "next/link";
-import Loader from "@/components/Loader";
-import Navbar from "@/components/Navbar";
-import { getPublicPosts } from "@/flow/scripts";
-import LogoFLow from "@/components/LogoFlow";
+import { getPublicPosts } from "../../flow/scripts";
+import Loader from "../../components/Loader";
+import Navbar from "../../components/Navbar";
+import LogoFLow from "../../components/LogoFlow";
 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 

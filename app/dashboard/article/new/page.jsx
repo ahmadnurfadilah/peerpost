@@ -4,18 +4,18 @@ import * as fcl from "@onflow/fcl";
 import { Tooltip } from "react-tooltip";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import GetTitle from "@/components/ai/GetTitle";
-import { useUserStore, useWriteStore } from "@/utils/store";
-import Tiptap from "@/components/tiptap/Tiptap";
+import { useUserStore, useWriteStore } from "../../../../utils/store";
 import { FilePond, registerPlugin } from "react-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond/dist/filepond.min.css";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import Loader from "@/components/Loader";
-import { handleFileToIpfs, handleJsonToIpfs } from "@/utils/ipfs";
-import { createPost } from "@/flow/transactions";
+import { handleFileToIpfs, handleJsonToIpfs } from "../../../../utils/ipfs";
+import { createPost } from "../../../../flow/transactions";
+import Loader from "../../../../components/Loader";
+import Tiptap from "../../../../components/tiptap/Tiptap";
+import GetTitle from "../../../../components/ai/GetTitle";
 
 registerPlugin(FilePondPluginImagePreview);
 

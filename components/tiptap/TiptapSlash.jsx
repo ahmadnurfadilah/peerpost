@@ -16,7 +16,7 @@ import va from "@vercel/analytics";
 import Magic from "../icon/Magic";
 import LoadingCircle from "../icon/LoadingCircle";
 import { toast } from "react-hot-toast";
-import { useWriteStore } from "@/utils/store";
+import { useWriteStore } from "../../utils/store";
 
 const Command = Extension.create({
   name: "slash-command",
