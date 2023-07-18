@@ -6,7 +6,9 @@ import { useUserStore } from "@/utils/store";
 import { useEffect } from "react";
 import Logo from "@/components/logo";
 import "../flow/config";
-import { Wallet } from "lucide-react";
+import LogoFLow from "@/components/LogoFlow";
+import Link from "next/link";
+import { LayoutGrid } from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
@@ -36,12 +38,11 @@ export default function Home() {
                 onClick={() => fcl.authenticate()}
                 className="flex items-center gap-2 font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
               >
-                <Wallet className="w-5 h-5" />
+                <LogoFLow />
                 <span>Connect Wallet</span>
               </button>
             </div>
           </div>
-          å
         </nav>
 
         <div className="container px-4 lg:px-6">
@@ -60,7 +61,7 @@ export default function Home() {
                 Empowering writers with a decentralized, AI-driven blogging platform. Join us to transform the way you write, read, and engage with relevant
                 content. Harness the power of blockchain and AI for an innovative blogging experience.
               </p>
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4">
                 <button
                   onClick={() => fcl.authenticate()}
                   className="inline-flex items-center gap-2 group font-bold text-sm bg-lime text-primary-800 px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125"
@@ -73,7 +74,13 @@ export default function Home() {
                   </svg>
                   <span>Start Writing</span>
                 </button>
-                {/* <p className="text-white/60">Explore Content</p> */}
+                <Link
+                  href="/0xd39b16b459032658"
+                  className="inline-flex items-center gap-2 group font-bold text-sm bg-primary-800 text-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125"
+                >
+                  <LayoutGrid className="w-5 h-5" />
+                  <span>Explore</span>
+                </Link>
               </div>
             </div>
             <div className="h-[40rem] relative">

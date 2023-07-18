@@ -16,10 +16,12 @@ export default function Page() {
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    fetchMyPosts();
-    getPurchasedCount(user.addr)
-      .then((res) => setPurchasedCount(res));
-  }, []);
+    if (user?.loggedIn) {
+      fetchMyPosts();
+      getPurchasedCount(user.addr)
+        .then((res) => setPurchasedCount(res));
+    }
+  }, [user]);
 
   if (!user?.loggedIn) {
     return router.push("/");

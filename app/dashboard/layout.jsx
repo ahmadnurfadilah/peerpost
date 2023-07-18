@@ -96,7 +96,7 @@ export default function Layout({ children }) {
                       />
                     </div>
                     <div>
-                      <h6 className="font-bold text-white text-sm">Name</h6>
+                      {/* <h6 className="font-bold text-white text-sm">Name</h6> */}
                       <p className="text-xs text-white/80">{user?.addr}</p>
                     </div>
                   </div>

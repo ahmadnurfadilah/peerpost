@@ -1,8 +1,7 @@
 "use client";
 import "../../../flow/config";
 import * as fcl from "@onflow/fcl";
-import Logo from "@/components/Logo";
-import { CircleDollarSign, Coins, Dot, Lock, Wallet } from "lucide-react";
+import { CircleDollarSign, Dot, Lock, Wallet } from "lucide-react";
 import { JetBrains_Mono } from "next/font/google";
 import { useParams } from "next/navigation";
 import { useUserStore } from "@/utils/store";
@@ -15,6 +14,8 @@ import Link from "next/link";
 import Loader from "@/components/Loader";
 import { purchasePost } from "@/flow/transactions";
 import { toast } from "react-hot-toast";
+import Navbar from "@/components/Navbar";
+import LogoFLow from "@/components/LogoFlow";
 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
@@ -36,9 +37,7 @@ export default function Page() {
   }, [author, postId]);
 
   useEffect(() => {
-
     if (post) {
-      console.log(post);
       if (post?.description != null) {
         fetch("https://" + post?.description?.replace("https://ipfs.io/ipfs", "") + ".ipfs.dweb.link")
           .then((res) => res.json())
@@ -53,10 +52,10 @@ export default function Page() {
         .then((res) => setBalance(res.balance / 100000000));
 
       if (post) {
-        if (parseInt(post.price) > 0 && !description ) {
+        if (parseInt(post.price) > 0 && !description) {
           getPaidPostById(post.author, user.addr, post.id).then((res) => {
             if (res !== null) {
-              setPost(res)
+              setPost(res);
             }
           });
         }
@@ -80,6 +79,7 @@ export default function Page() {
         }
       });
       await fcl.tx(txId).onceSealed();
+      setLoading(false);
       toast.dismiss();
       toast.success("Purchased!");
       getPublicPostById(author, postId).then((res) => {
@@ -96,42 +96,18 @@ export default function Page() {
     <>
       {loading && <Loader />}
 
-      <nav className="relative z-10 inset-x-0 top-0 w-full h-16 border-b border-lime/10 flex items-center justify-center bg-primary-800 mb-10">
-        <div className="container px-4 lg:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
-              <Logo className="h-6 text-lime hover:text-white" />
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            {user && user.loggedIn ? (
-              <Link className={`text-lime font-bold flex items-center gap-2 ${mono.className}`} href="/dashboard">
-                <img
-                  src={`https://source.boringavatars.com/beam/120/${user?.addr ?? 1}?colors=DEECA3,f4a261,e76f51`}
-                  alt="Photo"
-                  className="w-6 h-6 rounded-full"
-                />
-                <span className="text-sm">{user?.addr}</span>
-              </Link>
-            ) : (
-              <button
-                onClick={() => fcl.authenticate()}
-                className="flex items-center gap-2 font-bold text-sm text-primary-800 bg-lime px-6 py-3 rounded-md hover:shadow-lg hover:shadow-lime/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
-              >
-                <Wallet className="w-5 h-5" />
-                <span>Connect Wallet</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </nav>
-      <section className="max-w-3xl mx-auto">
+      <Navbar />
+
+      <section className="max-w-3xl mx-auto mt-10">
         <div className="text-center">
           <span className="text-xs font-bold px-2 py-1 bg-primary-50 text-primary-800 rounded-full">{post?.readingTime} Min Read</span>
           {post ? (
             <div className={`flex items-center justify-center text-sm font-bold mt-2 mb-4 ${mono.className}`}>
               <p>
-                By <span className="text-primary-500">{post?.author}</span>
+                By{" "}
+                <Link href={`/${post?.author}`} className="text-primary-500">
+                  {post?.author}
+                </Link>
               </p>{" "}
               <Dot /> <p>{moment(parseInt(post?.createDate * 1000)).format("MMM DD, YYYY")}</p>
             </div>
@@ -173,7 +149,7 @@ export default function Page() {
                         onClick={() => fcl.authenticate()}
                         className="flex items-center gap-2 mx-auto font-bold text-sm text-lime bg-primary-800 px-6 py-3 rounded-md hover:shadow-lg hover:shadow-primary-800/20 hover:-translate-y-px transition-all hover:contrast-125 cursor-pointer"
                       >
-                        <Wallet className="w-5 h-5" />
+                        <LogoFLow />
                         <span>Connect Wallet</span>
                       </button>
                     )}
